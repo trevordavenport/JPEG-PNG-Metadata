@@ -1,0 +1,8 @@
+This is the project 1 skeleton, version 3 (2/26/2014).
+
+Bug fixes:
+- Fig bug in run-sec-tests reported by Nikita Kouevda (@293).
+- Added functionality test tricky.jpg, added valgrind suppression
+  file.
+- Add flag for suppressions to run-sec-tests, for people who
+  don't realize they need to copy over the .valgrindrc file too.

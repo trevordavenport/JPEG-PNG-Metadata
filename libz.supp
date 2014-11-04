@@ -1,0 +1,9 @@
+{
+   <Suppress_known_warning_within_libz>
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   fun:uncompress
+   ...
+   fun:main
+}

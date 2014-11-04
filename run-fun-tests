@@ -1,0 +1,28 @@
+#!/bin/bash
+TMPOUT=`mktemp -u`
+NTESTED=0
+NPASSED=0
+TESTS=`cd tests/functionality; ls *.jpg *.png`
+echo Running functionality tests...
+for f in $TESTS
+do
+    OUT=${f%.*}.out
+    let NTESTED=1+$NTESTED
+    ./analyze tests/functionality/$f > $TMPOUT
+    if [ $? -ne 0 ]
+    then
+        echo "FAILED ($f): Program did not exit cleanly."
+        continue
+    fi
+    diff tests/functionality/out/$OUT $TMPOUT
+    if [ $? -ne 0 ]
+    then
+        echo "FAILED ($f): Incorrect output."
+        continue
+    fi
+    echo "Passed ($f)."
+    let NPASSED=1+$NPASSED
+done
+rm -f $TMPOUT
+echo Functionality tests: $NPASSED out of $NTESTED passed.
+[ $NPASSED -eq $NTESTED ] && exit 0 || exit 1

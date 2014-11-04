@@ -1,0 +1,38 @@
+//Security Tests for Buggy PNG Analyzer.
+//Authors: Trevor Davenport, Ryan Erickson
+//Class: CS161 - Computer Security
+
+#include <stdlib.h>
+#include "png.h"
+#include <stdio.h>
+#include <string.h>
+#include <zlib.h>
+
+int try_break_png_file(char *filename) {
+    FILE *f = fopen(filename, "r");
+    
+    //Return No error code if File Pointer is Null.
+    if (f == NULL)
+        return 0;
+        
+    /*
+        Security Flaws To Check:
+          -Out of bounds problems.
+          -Overflow/Underflow
+          -Null Pointers
+          -Forgetting to Malloc
+          
+        -- Edit an existing PNG, and change values in HexEditor
+            1. Change the first 8 bytes.
+            2. Change length field (big endian, overflow it)]
+            3. Add more than 1 time chunk
+            4. Null terminate/insert key in zTXt chunk
+            5. Change compressionByte to always be 1.
+            6. Make time chunk field lengths > then original length. [overflow]
+    */
+        
+    
+    int rv = analyze_png(f);
+    fclose(f);
+    return rv;
+}

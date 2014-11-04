@@ -1,0 +1,12 @@
+File: tests/functionality/functionality_test.png
+Title: PngSuite
+Author: Willem A.J. van Schaik
+(willem@schaik.com)
+Description: A compilation of a set of images created to test the
+various color-types of the PNG format. Included are
+black&white, color, paletted, with alpha channel, with
+transparency formats. All bit-depths allowed according
+to the spec are present.
+Timestamp: 1/1/2000 12:34:56
+Software: Created on a NeXTstation color using "pnmtopng".
+Disclaimer: Freeware.

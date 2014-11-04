@@ -1,0 +1,41 @@
+#!/bin/bash
+export LIBC_FATAL_STDERR_=1 # to get stack smashing errors to go to stderr
+TMPOUT=`mktemp -u`
+TMPERR=`mktemp -u`
+
+NTESTED=0
+NPASSED=0
+echo Running security tests...
+for f in tests/*/*.{png,jpg}
+do
+    let NTESTED=1+$NTESTED
+    valgrind -q --error-exitcode=42 \
+        --leak-check=no --track-origins=yes --suppressions=./libz.supp \
+        ./analyze $f > $TMPOUT 2> $TMPERR
+    RV=$?
+    if [ $RV -eq 42 ]
+    then
+        echo "FAILED ($f): Valgrind caught a memory error."
+        cat $TMPERR
+        continue
+    fi
+    if fgrep '*** stack smashing detected ***' $TMPERR >/dev/null
+    then
+        echo "FAILED ($f): Stack smashing detected."
+        cat $TMPERR
+        continue
+    fi
+    if [ $RV -ne 0 ]
+    then
+        echo "FAILED ($f): Program did not exit cleanly."
+        cat $TMPOUT
+        cat $TMPERR
+        continue
+    fi
+    echo "Passed ($f)."
+    # cat $TMPERR
+    let NPASSED=1+$NPASSED
+done
+rm -f $TMPOUT $TMPERR
+echo Security tests: $NPASSED out of $NTESTED passed.
+[ $NPASSED -eq $NTESTED ] && exit 0 || exit 1
